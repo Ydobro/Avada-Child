@@ -1,4 +1,4 @@
-var gulp         	= require('gulp'),
+const gulp         	= require('gulp'),
     sass         	= require('gulp-sass'),
     browserSync  	= require('browser-sync').create(),
     concat       	= require('gulp-concat'),
@@ -9,25 +9,28 @@ var gulp         	= require('gulp'),
 	sourcemaps 	 	= require('gulp-sourcemaps'),
 	spritesmith  	= require('gulp.spritesmith'),
 	plumber 		= require('gulp-plumber'),
-	notify 			= require("gulp-notify");
+	notify 			= require("gulp-notify"),
+    babel           = require('gulp-babel');
 
-var dist = '',
-    libs_dist = dist + 'libs/',
-	scss_dist = dist + 'scss',
-	css_dist = dist + 'css',
-	js_dist = dist + 'js';
+const dirs = {
+    libs: 'libs/',
+    scss: 'scss',
+    css: 'css',
+    es6: 'es6',
+    js: 'js'
+}
 
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', () => {
     browserSync.init({
         proxy: 'localhost',
         notify: false
     });
 });
 
-gulp.task('sass', function() {
-    return gulp.src(scss_dist + '/**/*.+(scss|sass)')
-	//.pipe(sourcemaps.init())
-	.pipe(plumber({errorHandler: notify.onError(function(error) {
+gulp.task('sass', () => {
+    return gulp.src(dirs.scss + '/**/*.+(scss|sass)')
+	.pipe(sourcemaps.init())
+	.pipe(plumber({errorHandler: notify.onError((error) => {
 		return {
 			title: 'Error',
 			message: error.message
@@ -37,24 +40,39 @@ gulp.task('sass', function() {
     .pipe(autoprefixer(['last 50 versions']))
 	.pipe(cssnano({zindex: false}))
     .pipe(rename({suffix: '.min'}))
-	//.pipe(sourcemaps.write('/maps'))
-    .pipe(gulp.dest(css_dist))
+	.pipe(sourcemaps.write('/maps'))
+    .pipe(gulp.dest(dirs.css))
 	.pipe(browserSync.stream({match: '**/*.css'}))
 });
 
-gulp.task('scripts', function() {
+gulp.task('es6', () => {
+    return gulp.src(dirs.es6 + '/**/*.js')
+    .pipe(plumber({errorHandler: notify.onError((error) => {
+		return {
+			title: 'Error',
+			message: error.message
+		}
+	})}))
+    .pipe(babel({
+        presets: ['es2015']
+    }))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(dirs.js));
+});
+
+gulp.task('scripts', () => {
     return gulp.src([
-        libs_dist + 'slick-carousel/slick/slick.min.js',
-        libs_dist + 'jQuery-viewport-checker/dist/jquery.viewportchecker.min.js',
+        //dirs.libs + 'jQuery-viewport-checker/dist/jquery.viewportchecker.min.js',
     ])
     .pipe(concat('libs.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest(js_dist));
+    .pipe(gulp.dest(dirs.js));
 });
 
-gulp.task('watch', ['browser-sync', 'scripts'], function() {
-	gulp.watch(scss_dist + '/**/*.+(scss|sass)', ['sass']);
-    gulp.watch(js_dist + '/**/*.js', browserSync.reload);
+gulp.task('watch', ['browser-sync', 'scripts'], () => {
+	gulp.watch(dirs.scss + '/**/*.+(scss|sass)', ['sass']);
+	gulp.watch(dirs.es6 + '/**/*.js', ['es6']);
+    gulp.watch(dirs.js + '/**/*.js', browserSync.reload);
 });
 
 gulp.task('default', ['watch']);

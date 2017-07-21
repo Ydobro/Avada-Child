@@ -54,7 +54,7 @@ gulp.task('es6', () => {
 		}
 	})}))
     .pipe(babel({
-        presets: ['es2015']
+        presets: ['es2015', 'babili']
     }))
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(dirs.js));

@@ -22,7 +22,7 @@ const dirs = {
 
 gulp.task('browser-sync', () => {
     browserSync.init({
-        proxy: 'localhost',
+        proxy: 'yuv',
         notify: false
     });
 });

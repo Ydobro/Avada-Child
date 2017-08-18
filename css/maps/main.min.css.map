@@ -1,0 +1,1 @@
+{"version":3,"sources":["base/_base.scss"],"names":[],"mappings":"AAAA,IACC,oBAAkB,AAAlB,gBAAkB,CAClB,AAED,QACI,SAAW,CACd,AAED,SACI,SAAW,CACd","file":"../main.min.css","sourcesContent":["img {\r\n\tobject-fit: cover;\r\n}\r\n\r\n.hidden {\r\n    opacity: 0;\r\n}\r\n\r\n.visible {\r\n    opacity: 1;\r\n}"]}

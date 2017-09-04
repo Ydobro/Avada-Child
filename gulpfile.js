@@ -69,7 +69,14 @@ gulp.task('scripts', () => {
     .pipe(gulp.dest(dirs.js));
 });
 
-gulp.task('watch', ['browser-sync', 'scripts'], () => {
+gulp.task('css:libs', () => {
+    return gulp.src('css/libs/*.css')
+    .pipe(concat('libs.min.css'))
+    .pipe(cssnano({zindex: false}))
+    .pipe(gulp.dest(dirs.css));
+});
+
+gulp.task('watch', ['browser-sync', 'scripts', 'css:libs'], () => {
 	gulp.watch(dirs.scss + '/**/*.+(scss|sass)', ['sass']);
 	gulp.watch(dirs.es6 + '/**/*.js', ['es6']);
     gulp.watch(dirs.js + '/**/*.js', browserSync.reload);

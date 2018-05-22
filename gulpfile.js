@@ -39,8 +39,16 @@ gulp.task('sass', () => {
 		}
 	})}))
 	.pipe(sass())
-    .pipe(autoprefixer(['last 50 versions']))
-	.pipe(cssnano({zindex: false}))
+    .pipe(autoprefixer({
+        browsers: ['last 2 version'],
+        remove: false
+    }))
+    .pipe(cssnano({
+        zindex: false,
+        autoprefixer: {
+            remove: false
+        }
+    }))
     .pipe(rename({suffix: '.min'}))
 	.pipe(sourcemaps.write('/maps'))
     .pipe(gulp.dest(dirs.css))

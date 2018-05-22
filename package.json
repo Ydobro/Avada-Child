@@ -23,6 +23,7 @@
     "gulp-sass": "^3.0.0",
     "gulp-sourcemaps": "^2.4.0",
     "gulp-uglifyjs": "^0.6.2",
+    "gulp-wait": "0.0.2",
     "gulp.spritesmith": "^6.3.0"
   }
 }

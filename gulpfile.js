@@ -10,7 +10,8 @@ const gulp         	= require('gulp'),
 	spritesmith  	= require('gulp.spritesmith'),
 	plumber 		= require('gulp-plumber'),
 	notify 			= require("gulp-notify"),
-    babel           = require('gulp-babel');
+    babel           = require('gulp-babel'),
+    wait            = require('gulp-wait');
 
 const dirs = {
     libs: 'libs/',
@@ -22,13 +23,14 @@ const dirs = {
 
 gulp.task('browser-sync', () => {
     browserSync.init({
-        proxy: 'yuv',
+        proxy: 'localhost',
         notify: false
     });
 });
 
 gulp.task('sass', () => {
     return gulp.src(dirs.scss + '/**/*.+(scss|sass)')
+    .pipe(wait(500))
 	.pipe(sourcemaps.init())
 	.pipe(plumber({errorHandler: notify.onError((error) => {
 		return {
@@ -37,12 +39,8 @@ gulp.task('sass', () => {
 		}
 	})}))
 	.pipe(sass())
-    .pipe(autoprefixer({ browsers: ['last 2 version'], remove: false }))
-    .pipe(cssnano({
-        zindex: false, 
-        autoprefixer: {
-            remove: false
-        }}))
+    .pipe(autoprefixer(['last 50 versions']))
+	.pipe(cssnano({zindex: false}))
     .pipe(rename({suffix: '.min'}))
 	.pipe(sourcemaps.write('/maps'))
     .pipe(gulp.dest(dirs.css))

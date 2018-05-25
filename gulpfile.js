@@ -38,7 +38,9 @@ gulp.task('sass', () => {
 			message: error.message
 		}
 	})}))
-	.pipe(sass())
+	.pipe(sass({
+        includePaths: ['node_modules']
+    }))
     .pipe(autoprefixer({
         browsers: ['last 2 version'],
         remove: false
